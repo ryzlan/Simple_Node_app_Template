@@ -1,0 +1,23 @@
+{
+  "name": "simple_node_app_with-crud",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ryzlan/Simple_Node_app_Template.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ryzlan/Simple_Node_app_Template/issues"
+  },
+  "homepage": "https://github.com/ryzlan/Simple_Node_app_Template#readme",
+  "dependencies": {
+    "express": "^4.16.4",
+    "joi": "^13.7.0"
+  }
+}
