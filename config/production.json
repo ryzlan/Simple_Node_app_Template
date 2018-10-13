@@ -1,0 +1,6 @@
+{
+  "name": "Simple Node app - Production",
+  "mail":{
+    "host":"prod-mail-server"
+  }
+}

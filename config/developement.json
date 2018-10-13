@@ -1,0 +1,6 @@
+{
+  "name": "Simple Node app - Developement",
+  "mail":{
+    "host":"dev-mail-server"
+  }
+}
