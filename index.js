@@ -1,13 +1,20 @@
-// this backend is for a video streaming services where people can choose and add genre
+const mongoose = require('mongoose');
 const debug = require('debug')('app:startup');
 const config= require('config');
 const morgan = require('morgan');
 const helmet = require('helmet');
 const logger = require('./middleware/logger');
 
-const Joi = require('joi');
 const express = require('express');
 const app = express();
+
+
+//database with mongoose
+mongoose.connect('mongodb://localhost:27017/vidly' , { useNewUrlParser: true })  // creates a collection named vidly
+        .then(() => {console.log("Connected to mongodb")})
+        .catch((err) => {console.error('Could not connect to mongodb')})
+
+
 
 //setting View Engine
 app.set('view engine' , 'pug' );
@@ -30,7 +37,6 @@ app.use('/api/genres', genre);
 app.use('/' , home)
 
 // configuration
-console
 console.log("APPlication name :"+ config.get('name') );
 //console.log("MAil server :"+ config.get('mail.host') );
 //console.log("MAil password :"+ config.get('mail.password') );
