@@ -24,6 +24,6 @@ function validateGenre(genre) {
   // result ={ error : null , value : has the data oibj }
 }
 
-
+exports.genreSchema = genreSchema;
 exports.Genre= Genre;
 exports.validateGenre = validateGenre;

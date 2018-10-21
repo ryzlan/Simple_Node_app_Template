@@ -1,3 +1,7 @@
+
+const Joi = require('joi');
+Joi.objectId = require('joi-objectid')(Joi);
+
 const mongoose = require('mongoose');
 const debug = require('debug')('app:startup');
 const config= require('config');
@@ -31,11 +35,14 @@ app.use(logger);
 
 // routing
 const genre= require('./routes/genre');
-const home =require('./routes/home')
+const home =require('./routes/home');
+const movie= require('./routes/movie');
+const rentals = require('./routes/rentals');
+const customers = require('./routes/customers');
 
 app.use('/api/genres', genre);
 app.use('/' , home)
-
+app.use('/api/movies', movie  );
 // configuration
 console.log("APPlication name :"+ config.get('name') );
 //console.log("MAil server :"+ config.get('mail.host') );
