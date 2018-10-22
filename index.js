@@ -8,10 +8,17 @@ const config= require('config');
 const morgan = require('morgan');
 const helmet = require('helmet');
 const logger = require('./middleware/logger');
+const config = require('config')
 
 const express = require('express');
 const app = express();
 
+
+//check to see if config is loaded or not
+if(!config.get('jwtPrivateKey')){
+  console.error('FATA ERROR : jwtPrivateKEy   is not defined ' );
+  process.exit(1); 
+}
 
 //database with mongoose
 mongoose.connect('mongodb://localhost:27017/vidly' , { useNewUrlParser: true })  // creates a collection named vidly
@@ -39,10 +46,19 @@ const home =require('./routes/home');
 const movie= require('./routes/movie');
 const rentals = require('./routes/rentals');
 const customers = require('./routes/customers');
+const users = require('./routes/users');
+const auth= require('./routes/auth');
 
 app.use('/api/genres', genre);
-app.use('/' , home)
+app.use('/' , home);
 app.use('/api/movies', movie  );
+app.use('/api/rentals' , rentals);
+app.use('/api/customers', customers );
+app.use('/api/users', users );
+app.use('/api/auth', auth );
+
+
+
 // configuration
 console.log("APPlication name :"+ config.get('name') );
 //console.log("MAil server :"+ config.get('mail.host') );

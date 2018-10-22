@@ -3,6 +3,10 @@ const Joi = require('joi');
 const express = require('express');
 const router = express.Router();
 
+//importing middleware to check authentication before executing a route
+const auth = require('../middleware/auth');
+const admin = require('../middleware/admin')
+
 // importing models and validation function
 const {Genre , validateGenre } = require('../models/genre');
 
@@ -15,7 +19,10 @@ router.get('/', async (req, res) => {
   res.send(genres);
 });
 
-router.post('/', async (req, res) => {
+
+// add middleware here to prevent other user from posting genre
+
+router.post('/',auth , async (req, res) => {
   const { error } = validateGenre(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
@@ -47,7 +54,7 @@ router.put('/:id', async (req, res) => {
   res.send(genre);
 });
 
-router.delete('/:id', async (req, res) => {
+router.delete('/:id',[auth , admin], async (req, res) => {
   //Looking up the genre with the id
 // not existing , return 404
 // if found delete and return the previous data backend

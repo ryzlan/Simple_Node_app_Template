@@ -1,3 +1,4 @@
 {
-  "name": "Simple Node App "
+  "name": "Simple Node App ",
+  "jwtPrivateKey": ""
 }
