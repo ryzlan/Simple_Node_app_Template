@@ -1,5 +1,3 @@
-const mongoose= require('mongoose');
-const Joi = require('joi');
 const express = require('express');
 const router = express.Router();
 
@@ -12,17 +10,18 @@ const {Genre , validateGenre } = require('../models/genre');
 
 
 
+// look at async file in middleware to find a custom way of handling error
 
 //GET the data from the database
-router.get('/', async (req, res) => {
-  const genres = await Genre.find().sort('name')
-  res.send(genres);
+router.get('/',async (req, res , next) => {
+    const genres = await Genre.find().sort('name')
+    res.send(genres);
 });
 
 
-// add middleware here to prevent other user from posting genre
+// add middleware "auth" here to prevent other user from posting genre
 
-router.post('/',auth , async (req, res) => {
+router.post('/',auth ,async (req, res) => {
   const { error } = validateGenre(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 

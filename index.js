@@ -1,30 +1,29 @@
 
-const Joi = require('joi');
-Joi.objectId = require('joi-objectid')(Joi);
 
-const mongoose = require('mongoose');
-const debug = require('debug')('app:startup');
-const config= require('config');
-const morgan = require('morgan');
+//const debug = require('debug')('app:startup');
+//const morgan = require('morgan');
 const helmet = require('helmet');
-const logger = require('./middleware/logger');
-const config = require('config')
 
+
+const winston = require('winston')
 const express = require('express');
 const app = express();
 
 
-//check to see if config is loaded or not
-if(!config.get('jwtPrivateKey')){
-  console.error('FATA ERROR : jwtPrivateKEy   is not defined ' );
-  process.exit(1); 
-}
+//adding error handling and logging of error {should be first to import}
+require('./startup/logging');
 
 //database with mongoose
-mongoose.connect('mongodb://localhost:27017/vidly' , { useNewUrlParser: true })  // creates a collection named vidly
-        .then(() => {console.log("Connected to mongodb")})
-        .catch((err) => {console.error('Could not connect to mongodb')})
+require('./startup/db')();
 
+//JWT key checker
+require('./startup/config');
+
+//adding routes
+require('./startup/routes')(app);
+
+//adding Joi validation
+require('./startup/joiValidation');
 
 
 //setting View Engine
@@ -38,37 +37,21 @@ app.use(express.json());// enables to use req.body json data
 app.use(express.urlencoded({extended: true}));
 app.use(express.static('public'));
 app.use(helmet());
-app.use(logger);
-
-// routing
-const genre= require('./routes/genre');
-const home =require('./routes/home');
-const movie= require('./routes/movie');
-const rentals = require('./routes/rentals');
-const customers = require('./routes/customers');
-const users = require('./routes/users');
-const auth= require('./routes/auth');
-
-app.use('/api/genres', genre);
-app.use('/' , home);
-app.use('/api/movies', movie  );
-app.use('/api/rentals' , rentals);
-app.use('/api/customers', customers );
-app.use('/api/users', users );
-app.use('/api/auth', auth );
 
 
 
-// configuration
-console.log("APPlication name :"+ config.get('name') );
-//console.log("MAil server :"+ config.get('mail.host') );
-//console.log("MAil password :"+ config.get('mail.password') );
 
-if(app.get('env') === 'developement'  ){
-  app.use(morgan('tiny'));
-  debug('Morgan freeman Freed ...');
-}
+// // configuration
+// console.log("APPlication name :"+ config.get('name') );
+// //console.log("MAil server :"+ config.get('mail.host') );
+// //console.log("MAil password :"+ config.get('mail.password') );
+//
+// if(app.get('env') === 'developement'  ){
+//   app.use(morgan('tiny'));
+//   debug('Morgan freeman Freed ...');
+// }
 
-// set PORT =5000 ;then nodemon index.js
+// set PORT =5000
+//;then nodemon index.js
 const port = process.env.PORT || 3000;
-app.listen(port, () => console.log(`Listening on port ${port}...`));
+app.listen(port, () => winston.log(`Listening on port ${port}...`));
